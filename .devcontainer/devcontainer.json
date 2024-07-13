@@ -1,0 +1,9 @@
+{
+  "name": "Go",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {}
+  },
+  "remoteUser": "root",
+  "containerUser": "root"
+}
