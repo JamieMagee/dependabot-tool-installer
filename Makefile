@@ -3,6 +3,9 @@
 build:
 	CGO_ENABLED=0 go build -o bin/dependabot-tools -tags "${GO_TAGS}" -ldflags "-s -w" .
 
+docker:
+	docker build -t dependabot-tools .
+
 tidy:
 	go mod tidy
 
@@ -11,10 +14,10 @@ lint:
 
 validate: tidy lint
 
-test:
-	go test -v ./pkg/...
+unit-test:
+	go test -v ./...
 
-integration: build
+integration-test:
 	docker build -t dependabot-tools .
 
 	@for dir in test/*; do \
@@ -23,3 +26,5 @@ integration: build
 			docker build -t dependabot-tools-test -f $$dir/Dockerfile .; \
 		fi; \
 	done
+
+test: unit-test integration-test
