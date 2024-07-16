@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 var InstallGitCmd = &cobra.Command{
 	Use:  "git",
 	Args: cobra.ExactArgs(0),
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, _ []string) error {
 		d := GitInstaller{}
 
 		err := d.InstallPrerequisites()

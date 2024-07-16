@@ -10,7 +10,7 @@ import (
 var InstallDotnetCmd = &cobra.Command{
 	Use:  "dotnet",
 	Long: "Install the .NET SDK",
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, args []string) error {
 		d := DotnetInstaller{}
 
 		distro, err := helpers.ReadDistro()
