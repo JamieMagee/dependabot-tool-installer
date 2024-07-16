@@ -6,7 +6,6 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use: "dependabot-tools",
-	
 }
 
 func Execute() error {
