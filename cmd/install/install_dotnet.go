@@ -68,7 +68,7 @@ func (d DotnetInstaller) InstallPrerequisites(distro helpers.Distro) error {
 	return nil
 }
 
-func (d DotnetInstaller) Install(distro helpers.Distro, args []string) error {
+func (d DotnetInstaller) Install(_ helpers.Distro, args []string) error {
 	url := fmt.Sprintf("https://dotnetcli.azureedge.net/dotnet/Sdk/%s/dotnet-sdk-%s-linux-x64.tar.gz", args[0], args[0])
 	dir, err := helpers.EnsureToolDirectory("dotnet")
 	if err != nil {

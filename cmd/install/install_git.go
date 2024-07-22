@@ -39,7 +39,7 @@ type GitInstaller struct {
 	Installer
 }
 
-func (g GitInstaller) InstallPrerequisites(distro helpers.Distro) error {
+func (g GitInstaller) InstallPrerequisites(_ helpers.Distro) error {
 	err := helpers.AptInstall("gnupg")
 	if err != nil {
 		return err
@@ -48,13 +48,16 @@ func (g GitInstaller) InstallPrerequisites(distro helpers.Distro) error {
 	return nil
 }
 
-func (g GitInstaller) Install(distro helpers.Distro, args []string) error {
+func (g GitInstaller) Install(_ helpers.Distro, _ []string) error {
 	filePath := "/etc/apt/sources.list.d/git.list"
 	contents := "deb http://ppa.launchpad.net/git-core/ppa/ubuntu noble main"
-	os.WriteFile(filePath, []byte(contents), 0644)
+	err := os.WriteFile(filePath, []byte(contents), 0644)
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("apt-key", "adv", "--keyserver", "keyserver.ubuntu.com", "--recv-keys", "E1DD270288B4E6030699E45FA1715D88E1DF1F24")
-	err := cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
 		return err
