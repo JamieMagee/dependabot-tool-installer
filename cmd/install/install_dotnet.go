@@ -8,22 +8,24 @@ import (
 )
 
 var InstallDotnetCmd = &cobra.Command{
-	Use:  "dotnet",
-	Long: "Install the .NET SDK",
+	Use:     "dotnet",
+	Long:    "Install the .NET SDK",
+	Example: "dependabot-tools install dotnet 8.0.100",
+	Args:    cobra.ExactArgs(1),
 	RunE: func(_ *cobra.Command, args []string) error {
-		d := DotnetInstaller{}
-
 		distro, err := helpers.ReadDistro()
 		if err != nil {
 			return err
 		}
+
+		d := DotnetInstaller{}
 
 		err = d.InstallPrerequisites(distro)
 		if err != nil {
 			return err
 		}
 
-		err = d.Install(args[0])
+		err = d.Install(distro, args)
 		if err != nil {
 			return err
 		}
@@ -36,14 +38,27 @@ func init() {
 	InstallDotnetCmd.Flags().StringP("version", "v", "latest", "Version to install")
 }
 
-type DotnetInstaller struct{}
+type DotnetInstaller struct {
+	Installer
+}
 
-func (d *DotnetInstaller) InstallPrerequisites(distro helpers.Distro) error {
+func (d DotnetInstaller) InstallPrerequisites(distro helpers.Distro) error {
 	var err error
 
-	switch distro.Version {
-	case "24.04":
-		err = helpers.AptInstall("libc6", "libgcc-s1", "libicu74", "libssl3t64", "libstdc++6", "tzdata", "zlib1g")
+	switch distro.Name {
+	case "ubuntu":
+		switch distro.Version {
+		case "24.04":
+			err = helpers.AptInstall("libc6", "libgcc-s1", "libicu74", "libssl3t64", "libstdc++6", "tzdata", "zlib1g")
+		case "22.04":
+			err = helpers.AptInstall("libc6", "libgcc1", "libgssapi-krb5-2", "libicu70", "libssl3", "libstdc++6", "zlib1g")
+		case "20.04":
+			err = helpers.AptInstall("libc6", "libgcc1", "libgssapi-krb5-2", "libicu66", "libssl1.1", "libstdc++6", "zlib1")
+		default:
+			err = fmt.Errorf("unsupported Ubuntu version: %s", distro.Version)
+		}
+	default:
+		err = fmt.Errorf("unsupported distro: %s", distro.Name)
 	}
 
 	if err != nil {
@@ -53,8 +68,8 @@ func (d *DotnetInstaller) InstallPrerequisites(distro helpers.Distro) error {
 	return nil
 }
 
-func (d *DotnetInstaller) Install(version string) error {
-	url := fmt.Sprintf("https://dotnetcli.azureedge.net/dotnet/Sdk/%s/dotnet-sdk-%s-linux-x64.tar.gz", version, version)
+func (d DotnetInstaller) Install(distro helpers.Distro, args []string) error {
+	url := fmt.Sprintf("https://dotnetcli.azureedge.net/dotnet/Sdk/%s/dotnet-sdk-%s-linux-x64.tar.gz", args[0], args[0])
 	dir, err := helpers.EnsureToolDirectory("dotnet")
 	if err != nil {
 		return err
@@ -65,7 +80,7 @@ func (d *DotnetInstaller) Install(version string) error {
 		return err
 	}
 
-	err = helpers.LinkWrapper(dir, "dotnet", "", []string{"CLR_ICU_VERSION_OVERRIDE=74"})
+	err = helpers.LinkWrapper(dir, "dotnet", "", []string{})
 	if err != nil {
 		return err
 	}

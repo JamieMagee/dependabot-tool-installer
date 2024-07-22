@@ -1,7 +1,7 @@
 #--------------------------------------
 # Image: base
 #--------------------------------------
-FROM dependabot-tools AS base
+FROM dependabot.azurecr.io/dependabot-tools AS base
 
 RUN touch /.dummy
 
