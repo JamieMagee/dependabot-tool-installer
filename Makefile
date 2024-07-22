@@ -4,7 +4,7 @@ build:
 	CGO_ENABLED=0 go build -o bin/dependabot-tools -tags "${GO_TAGS}" -ldflags "-s -w" .
 
 docker:
-	docker build -t dependabot-tools .
+	docker build -t ghcr.io/jamiemagee/dependabot-tools .
 
 tidy:
 	go mod tidy
@@ -18,7 +18,7 @@ unit-test:
 	go test -v ./...
 
 integration-test:
-	docker build -t dependabot-tools .
+	docker build -t ghcr.io/jamiemagee/dependabot-tools .
 
 	@for dir in test/*; do \
 		if [ -d "$$dir" ]; then \

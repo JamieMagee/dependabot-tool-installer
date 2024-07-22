@@ -6,4 +6,3 @@ type Installer interface {
 	Install(distro helpers.Distro, args []string) error
 	InstallPrerequisites(distro helpers.Distro) error
 }
-
