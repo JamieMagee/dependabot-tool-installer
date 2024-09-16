@@ -29,5 +29,4 @@ func FindArch() (Arch, error) {
 	default:
 		return 0, fmt.Errorf("unsupported architecture: %s", string(output))
 	}
-
 }

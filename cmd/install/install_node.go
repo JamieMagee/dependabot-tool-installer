@@ -38,7 +38,7 @@ type NodeInstaller struct {
 	Installer
 }
 
-func (n NodeInstaller) Install(distro helpers.Distro, arch helpers.Arch, args []string) error {
+func (n NodeInstaller) Install(_ helpers.Distro, arch helpers.Arch, args []string) error {
 	nodeArch, err := NodeArch(arch)
 	if err != nil {
 		return err
@@ -73,6 +73,6 @@ func NodeArch(arch helpers.Arch) (string, error) {
 	case 2:
 		return "arm64", nil
 	default:
-		return "", fmt.Errorf("unsupported architecture: %s", string(arch))
+		return "", fmt.Errorf("unsupported architecture: %d", arch)
 	}
 }
