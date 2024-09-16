@@ -17,9 +17,7 @@ validate: tidy lint
 unit-test:
 	go test -v ./...
 
-integration-test:
-	docker build -t ghcr.io/jamiemagee/dependabot-tools .
-
+integration-test: docker
 	@for dir in test/*; do \
 		if [ -d "$$dir" ]; then \
 			echo "Running integration tests for $$dir"; \

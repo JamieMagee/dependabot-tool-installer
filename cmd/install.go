@@ -14,4 +14,5 @@ var installCmd = &cobra.Command{
 func init() {
 	installCmd.AddCommand(install.InstallDotnetCmd)
 	installCmd.AddCommand(install.InstallGitCmd)
+	installCmd.AddCommand(install.InstallNodeCmd)
 }

@@ -18,6 +18,11 @@ var InstallDotnetCmd = &cobra.Command{
 			return err
 		}
 
+		arch, err := helpers.FindArch()
+		if err != nil {
+			return err
+		}
+
 		d := DotnetInstaller{}
 
 		err = d.InstallPrerequisites(distro)
@@ -25,7 +30,7 @@ var InstallDotnetCmd = &cobra.Command{
 			return err
 		}
 
-		err = d.Install(distro, args)
+		err = d.Install(distro, arch, args)
 		if err != nil {
 			return err
 		}
@@ -42,6 +47,7 @@ type DotnetInstaller struct {
 	Installer
 }
 
+// TODO: Set CLR_ICU_VERSION_OVERRIDE to the installed version
 func (d DotnetInstaller) InstallPrerequisites(distro helpers.Distro) error {
 	var err error
 
@@ -68,7 +74,7 @@ func (d DotnetInstaller) InstallPrerequisites(distro helpers.Distro) error {
 	return nil
 }
 
-func (d DotnetInstaller) Install(_ helpers.Distro, args []string) error {
+func (d DotnetInstaller) Install(_ helpers.Distro, _ helpers.Arch, args []string) error {
 	url := fmt.Sprintf("https://dotnetcli.azureedge.net/dotnet/Sdk/%s/dotnet-sdk-%s-linux-x64.tar.gz", args[0], args[0])
 	dir, err := helpers.EnsureToolDirectory("dotnet")
 	if err != nil {
