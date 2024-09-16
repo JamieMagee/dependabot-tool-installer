@@ -1,6 +1,6 @@
 module github.com/jamiemagee/dependabot-tool-installer
 
-go 1.22.5
+go 1.23.1
 
 require github.com/spf13/cobra v1.8.1
 
